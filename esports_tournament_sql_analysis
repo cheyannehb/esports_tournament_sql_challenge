@@ -67,24 +67,24 @@ VALUES (1, 1, 2, '2022-01-01', 1, 16, 14),
 SELECT 
 	player_name, 
 	salary
-FROM esports.players AS players
+FROM esports.players AS p
 WHERE salary > 100000;
 
 --- 2. What is the team name of the player with player_id = 3? 
 SELECT 
 	team_name
-FROM esports.teams AS teams
-LEFT JOIN esports.players AS players
-	ON teams.team_id = players.team_id
+FROM esports.teams AS t
+LEFT JOIN esports.players AS p
+	ON t.team_id = p.team_id
 WHERE player_id = 3;
 
 ---3. What is the total number of players in each team?
 SELECT 
 	team_name, 
 	COUNT(player_id) AS total_players
-FROM esports.teams AS teams
-FULL JOIN esports.players AS players
-	ON teams.team_id = players.team_id
+FROM esports.teams AS t
+FULL JOIN esports.players AS p
+	ON t.team_id = p.team_id
 GROUP BY team_name
 ORDER BY total_players;
 
@@ -92,26 +92,26 @@ ORDER BY total_players;
 SELECT 
 	team_name, 
 	player_name AS captain_name
-FROM esports.teams AS teams
-JOIN esports.players AS players
-	ON teams.captain_id = players.player_id
-WHERE teams.team_id = 2;
+FROM esports.teams AS t
+JOIN esports.players AS p
+	ON t.captain_id = p.player_id
+WHERE t.team_id = 2;
 
 ---5. What are the player names and their roles in the team with team_id = 1? 
 SELECT 
 	player_name, 
 	role
-FROM esports.players AS players
-JOIN esports.teams AS teams
-	ON players.team_id = teams.team_id
-WHERE teams.team_id = 1;
+FROM esports.players AS p
+JOIN esports.teams AS t
+	ON p.team_id = t.team_id
+WHERE t.team_id = 1;
 
 ---6. What are the team names and the number of matches they have won? 
 SELECT 
 	team_name, COUNT(winner_id) AS matches_won
-FROM  esports.matches AS matches
-LEFT JOIN esports.teams AS teams
-	ON matches.winner_id = teams.team_id
+FROM  esports.matches AS m
+LEFT JOIN esports.teams AS t
+	ON m.winner_id = t.team_id
 GROUP BY team_name
 ORDER BY matches_won;
 
@@ -119,18 +119,18 @@ ORDER BY matches_won;
 SELECT 
 	country, 
 	ROUND(AVG(salary),2) AS avg_usa_salary
-FROM esports.teams AS teams
-JOIN esports.players AS players
-	ON teams.team_id=players.player_id
+FROM esports.teams AS t
+JOIN esports.players AS p
+	ON t.team_id=p.player_id
 WHERE country = 'USA'
 GROUP BY country;
 
 ---8. Which team won the most matches? 
 SELECT 
 	team_name, COUNT(winner_id) AS matches_won
-FROM  esports.matches AS matches
-LEFT JOIN esports.teams AS teams
-	ON matches.winner_id = teams.team_id
+FROM  esports.matches AS m
+LEFT JOIN esports.teams AS t
+	ON m.winner_id = t.team_id
 GROUP BY team_name
 ORDER BY matches_won DESC
 LIMIT 1;
@@ -139,9 +139,9 @@ LIMIT 1;
 SELECT 
 	team_name, 
 	COUNT(player_id) AS highest_paid_player_count
-FROM esports.teams AS teams
-FULL JOIN esports.players AS players
-	ON teams.team_id = players.team_id
+FROM esports.teams AS t
+FULL JOIN esports.players AS p
+	ON t.team_id = p.team_id
 WHERE salary > 100000
 GROUP BY team_name;
 
@@ -152,5 +152,5 @@ SELECT
 	 	CASE WHEN score_team1 > score_team2 THEN score_team1
 				WHEN score_team2 > score_team1 THEN score_team2
 				ELSE NULL END AS score
-		FROM esports.matches AS matches
+		FROM esports.matches AS m
 		WHERE match_id = 3;
